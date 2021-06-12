@@ -4,7 +4,7 @@
         private $UserName = "emotion";
         private $password = "123456";
         private $DBName = "chess";
-        private $conn;
+        public $conn;
         function connect(){
             $this->conn = mysqli_connect($this->ServerName,$this->UserName,$this->password,$this->DBName);
         }
@@ -46,5 +46,21 @@
             $winStatistical[2] = $row["tie"];
             return $winStatistical;
         }
+
+
+        function GET(){
+            $sql="SELECT*FROM lobby";
+            $result = mysqli_query($this->conn,$sql);
+            session_start();
+            while($row = mysqli_fetch_assoc($result)){
+                $_SESSION["table_id"] = $row["table_id"];
+                $_SESSION["time"] = $row["time"];
+                $_SESSION["player1"] = $row["player1"];
+                $_SESSION["player2"] = $row["player2"];
+                $_SESSION["status"] = $row["status"];
+
+            }
+    
+    }
     }
 ?>
