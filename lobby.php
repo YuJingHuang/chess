@@ -1,4 +1,15 @@
 <html>
+
+<?php
+include "class/database.php";
+$database = new database();
+$database->connect();
+$database->GET();
+?>
+
+
+
+
     <head>
         <title>西洋棋-大廳</title>
         <style type ="text/css">
@@ -15,42 +26,66 @@
         </style>
     </head>
     <body style = "margin:0px;background-color:#FFF8D7">
+
         <div class = "container">
             <div class = "left"></div>
             <div class = "center">
-                <form class = "table">
-                    <br/>
-                    <button type="submit" class = "table-button">
-                        <br/>
-                        <table width = "450px" hight = "300px" cellpading = "1000" class = "table-table">
-                            <tr>
-                                <td rowspan = "2" style = "color:#0066CC">06/10 3:14</td>
-                                <td style = "color:#FFFFFF">白方</td>
-                                <td>黑方</td>
-                                <td rowspan = "2" style = "color:#0066CC">遊玩中</td>
-                            </tr>
-                            <tr>
-                                <td style = "color:#FFFFFF"><br/>emotion</td>
-                                <td><br/>sickness</td>
-                            </tr>
-                        </table>
-                        <br/>
-                    </button>s
-                </form>
+            <?php
+                $sql = "SELECT * FROM lobby";
+                $result = mysqli_query($database->conn, $sql);
+                while($row = mysqli_fetch_assoc($result)){
+                    echo"
+                        <form class = 'table'>
+                            <br/>
+                            <button type='submit' class = 'table-button'>
+                                <br/>
+                                <table width = '450px' hight = '300px' cellpading = '1000' class = 'table-table'>
+                                    <tr>
+                                        <td rowspan = '2' style = 'color:#0066CC'>".substr($row['time'], 11,5)."</td>
+                                        <td style = 'color:#FFFFFF'>白方</td>
+                                        <td>黑方</td>
+                                        <td rowspan = '2' style = 'color:#0066CC'>遊玩中</td>
+                                    </tr>
+                                    <tr>
+                                        <td style = 'color:#FFFFFF'><br/>".$row['player1']."</td>
+                                        <td><br/>".$row['player2']."</td>
+                                    </tr>
+                                </table>
+                                <br/>
+                            </button>
+                        </form>";  
+                }
+
+
+
+
+            /*
+            if (isset($_POST["CREATE"])) {
+                $tableid = $_SESSION["table_id"];
+                $time = $_SESSION["time"];
+                $player1 = $_SESSION["player1"];
+                $player2 = $_SESSION["player2"];
+                $status = $_SESSION["status"];
+                echo "'$tableID'"*/
+
+                ?>
             </div>
             <div class = "right">
                 <div class = "button">
-                    <form>
-                        <input type="submit" value="開設新房" class = "newtable-button">
+                    <form method="POST" action="class/createLobby.php">
+
+                        <input type="submit" value="開設新房" class = "newtable-button" name="CREATE">
                         <br/>
                         <br/>
-                        <input type="submit" value="上一頁" class = "other-button">
-                        <input type="submit" value="下一頁" class = "other-button">
-                        <input type="submit" value="刷新" class = "other-button">
-                        <input type="submit" value="離開" class = "other-button">
+                        <input type="button" value="上一頁" class = "other-button">
+                        <input type="button" value="下一頁" class = "other-button">
+                        <input type="button" value="刷新" class = "other-button" onclick="window.location.reload()"  >
+                        <input type="button" value="離開" class = "other-button" onclick="javascript:location.href='./index.php'">
                     </form>
                 </div>
             </div>
         </div>
+        
+                            <?/*自動重新整理*/ /*php header('refresh: 5;url="./lobby.php"')*/ ?>
     </body>
 </html>
